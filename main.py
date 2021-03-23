@@ -19,6 +19,7 @@ def Create():
           VALUES (1, 'BADRU', 'ZAMAN', 'badru.cse@gmail.com', '+8801719730475')");
     conn.commit()
     return jsonify(list),200
+    dfg
 
 if __name__ == "__main__":
     app.run()
