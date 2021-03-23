@@ -20,6 +20,5 @@ def Create():
     conn.commit()
     return jsonify(list),200
 
-
 if __name__ == "__main__":
     app.run()
