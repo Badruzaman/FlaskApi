@@ -7,7 +7,6 @@ import sqlite3
 
 app = Flask(__name__)
 
-
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 @app.route("/api/v1/DummyApi/", methods=['GET'])
 def DummyApi():
@@ -29,17 +28,17 @@ def Register():
 
     try:
          conn = sqlite3.connect('test.db')
-         cursor = conn.cursor()
          request_data = request.get_json()
+         Id = request_data['Id']
          FIRSTNAME = request_data['FirstName']
          LASTNAME = request_data['LastName']
          EMAIL = request_data['Email']
          PHONE = request_data['Phone']
-         #cursor.execute("create table people (name_last, age)")
+         #conn.execute("create table people (name_last, age)")
          who = "Yeltsin"
          age = 72
          conn.execute("insert into people values (?, ?)", (who, age))
-         conn.execute("INSERT INTO Users VALUES (?, ? , ?, ?, ?)", (3, FIRSTNAME,LASTNAME,EMAIL,PHONE))
+         conn.execute("INSERT INTO Users VALUES (?, ? , ?, ?, ?)", (Id, FIRSTNAME,LASTNAME,EMAIL,PHONE))
          conn.commit()
          #cursor.execute("INSERT INTO Users (ID,FIRSTNAME,LASTNAME,EMAIL,PHONE) \
                    #VALUES (FIRSTNAME, LASTNAME, EMAIL, PHONE)");
