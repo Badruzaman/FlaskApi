@@ -7,7 +7,6 @@ import sqlite3
 
 app = Flask(__name__)
 
-conn = sqlite3.connect('test.db')
 
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 @app.route("/api/v1/DummyApi/", methods=['GET'])
@@ -27,13 +26,28 @@ def Create(firstname):
 #https://www.digitalocean.com/community/tutorials/processing-incoming-request-data-in-flask
 @app.route("/Register", methods=['POST'])
 def Register():
-    request_data = request.get_json()
-    firstName = request_data['FirstName']
-    #firstName = request['firstname']
-   #conn.execute("INSERT INTO Users (ID,FIRSTNAME,LASTNAME,EMAIL,PHONE) \
-          #VALUES (1, 'BADRU', 'ZAMAN', 'badru.cse@gmail.com', '+8801719730475')");
-    #conn.commit()
-    return jsonify(name = firstName),200
+
+    try:
+         conn = sqlite3.connect('test.db')
+         cursor = conn.cursor()
+         request_data = request.get_json()
+         FIRSTNAME = request_data['FirstName']
+         LASTNAME = request_data['LastName']
+         EMAIL = request_data['Email']
+         PHONE = request_data['Phone']
+         #cursor.execute("create table people (name_last, age)")
+         who = "Yeltsin"
+         age = 72
+         conn.execute("insert into people values (?, ?)", (who, age))
+         conn.execute("INSERT INTO Users VALUES (?, ? , ?, ?, ?)", (3, FIRSTNAME,LASTNAME,EMAIL,PHONE))
+         conn.commit()
+         #cursor.execute("INSERT INTO Users (ID,FIRSTNAME,LASTNAME,EMAIL,PHONE) \
+                   #VALUES (FIRSTNAME, LASTNAME, EMAIL, PHONE)");
+         #conn.commit()
+    except ValueError:
+        print(ValueError)
+
+    return jsonify(request_data),200
 
 if __name__ == "__main__":
     app.run()
