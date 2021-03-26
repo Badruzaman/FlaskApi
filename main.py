@@ -1,4 +1,6 @@
 
+
+
 from flask import  Flask,jsonify,request
 from flask_cors import CORS
 import sqlite3
@@ -20,6 +22,17 @@ def Create(firstname):
           #VALUES (1, 'BADRU', 'ZAMAN', 'badru.cse@gmail.com', '+8801719730475')");
     #conn.commit()
     return jsonify(name = firstname),200
+
+#https://www.digitalocean.com/community/tutorials/processing-incoming-request-data-in-flask
+@app.route("/Register", methods=['POST'])
+def Register():
+    request_data = request.get_json()
+    firstName = request_data['FirstName']
+    #firstName = request['firstname']
+   #conn.execute("INSERT INTO Users (ID,FIRSTNAME,LASTNAME,EMAIL,PHONE) \
+          #VALUES (1, 'BADRU', 'ZAMAN', 'badru.cse@gmail.com', '+8801719730475')");
+    #conn.commit()
+    return jsonify(name = firstName),200
 
 if __name__ == "__main__":
     app.run()
