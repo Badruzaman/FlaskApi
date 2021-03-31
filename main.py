@@ -21,30 +21,43 @@ def Create(firstname):
 
 
 #https://www.digitalocean.com/community/tutorials/processing-incoming-request-data-in-flask
-@app.route("/Register", methods=['POST'])
+#https://docs.python.org/3/library/sqlite3.html
+@app.route("/api/v1//Register/", methods=['POST'])
 def Register():
 
     try:
-         conn = sqlite3.connect('test.db')
+         conn = sqlite3.connect('BGIT.db')
          request_data = request.get_json()
-         Id = request_data['Id']
-         FIRSTNAME = request_data['FirstName']
-         LASTNAME = request_data['LastName']
-         EMAIL = request_data['Email']
-         PHONE = request_data['Phone']
-         #conn.execute("create table people (name_last, age)")
-         who = "Yeltsin"
-         age = 72
-         conn.execute("insert into people values (?, ?)", (who, age))
-         conn.execute("INSERT INTO Users VALUES (?, ? , ?, ?, ?)", (Id, FIRSTNAME,LASTNAME,EMAIL,PHONE))
+
+         FullName = request_data['FullName']
+         Email = request_data['Email']
+         Mobile = request_data['Mobile']
+
+         #conn.execute('''CREATE TABLE Users( Id INTEGER PRIMARY KEY AUTOINCREMENT,FULLNAME TEXT NOT NULL,EMAIL TEXT NOT NULL,MOBILE TEXT)''')
+
+         conn.execute("INSERT INTO Users (FULLNAME, EMAIL,MOBILE) VALUES (?, ?, ?)", (FullName, Email, Mobile))
          conn.commit()
+         conn.close()
+         
          #cursor.execute("INSERT INTO Users (ID,FIRSTNAME,LASTNAME,EMAIL,PHONE) \
                    #VALUES (FIRSTNAME, LASTNAME, EMAIL, PHONE)");
          #conn.commit()
     except ValueError:
         print(ValueError)
-
     return jsonify(request_data),200
+
+
+@app.route("/api/v1//About/", methods=['GET'])
+def About():
+    try:
+        request_data = {};
+        conn = sqlite3.connect('BGIT.db')
+        cursor = conn.execute("SELECT Id, DESCRIPTION, ISACTIVE FROM About")
+        for row in cursor:
+            request_data = dict({"Id": int(row[0]), "Description": row[1],"IsActive" : row[2]})
+    except ValueError:
+        print(ValueError)
+    return jsonify(request_data), 200
 
 if __name__ == "__main__":
     app.run()
