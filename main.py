@@ -53,7 +53,7 @@ def AboutPost():
         conn = sqlite3.connect('BGIT.db')
         request_data = request.get_json()
         Description = request_data['Description']
-        conn.execute("UPDATE About SET ISACTIVE = 0 ")
+        conn.execute("UPDATE About SET ISACTIVE = 0 WHERE ISACTIVE = 1")
         conn.commit()
         conn.execute("INSERT INTO About (DESCRIPTION, ISACTIVE) VALUES (?, ?)", (Description, 1))
         conn.commit()
