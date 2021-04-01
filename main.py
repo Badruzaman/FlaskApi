@@ -22,7 +22,7 @@ def Create(firstname):
 
 #https://www.digitalocean.com/community/tutorials/processing-incoming-request-data-in-flask
 #https://docs.python.org/3/library/sqlite3.html
-@app.route("/api/v1//Register/", methods=['POST'])
+@app.route("/api/v1/Register/", methods=['POST'])
 def Register():
 
     try:
@@ -47,17 +47,31 @@ def Register():
     return jsonify(request_data),200
 
 
-@app.route("/api/v1//About/", methods=['GET'])
-def About():
+@app.route("/api/v1/AboutPost/", methods=['POST'])
+def AboutPost():
     try:
-        request_data = {};
         conn = sqlite3.connect('BGIT.db')
-        cursor = conn.execute("SELECT Id, DESCRIPTION, ISACTIVE FROM About")
-        for row in cursor:
-            request_data = dict({"Id": int(row[0]), "Description": row[1],"IsActive" : row[2]})
+        request_data = request.get_json()
+        Description = request_data['Description']
+        conn.execute("UPDATE About SET ISACTIVE = 0 ")
+        conn.commit()
+        conn.execute("INSERT INTO About (DESCRIPTION, ISACTIVE) VALUES (?, ?)", (Description, 1))
+        conn.commit()
+        conn.close()
     except ValueError:
         print(ValueError)
     return jsonify(request_data), 200
+
+@app.route("/api/v1/About/", methods=['GET'])
+def About():
+    try:
+        conn = sqlite3.connect('BGIT.db')
+        cursor = conn.execute("SELECT Id, DESCRIPTION, ISACTIVE FROM About WHERE ISACTIVE = 1")
+        for row in cursor:
+            response_data = [{'Id':  int(row[0]), "Description": row[1],"IsActive" : row[2]}]
+    except ValueError:
+        print(ValueError)
+    return jsonify(response_data), 200
 
 if __name__ == "__main__":
     app.run()
