@@ -19,9 +19,6 @@ def Create(firstname):
     #conn.commit()
     return jsonify(name = firstname),200
 
-
-#https://www.digitalocean.com/community/tutorials/processing-incoming-request-data-in-flask
-#https://docs.python.org/3/library/sqlite3.html
 @app.route("/api/v1/Register/", methods=['POST'])
 def Register():
 
