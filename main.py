@@ -30,15 +30,10 @@ def Register():
          Email = request_data['Email']
          Mobile = request_data['Mobile']
 
-         #conn.execute('''CREATE TABLE Users( Id INTEGER PRIMARY KEY AUTOINCREMENT,FULLNAME TEXT NOT NULL,EMAIL TEXT NOT NULL,MOBILE TEXT)''')
-
          conn.execute("INSERT INTO Users (FULLNAME, EMAIL,MOBILE) VALUES (?, ?, ?)", (FullName, Email, Mobile))
          conn.commit()
          conn.close()
-         
-         #cursor.execute("INSERT INTO Users (ID,FIRSTNAME,LASTNAME,EMAIL,PHONE) \
-                   #VALUES (FIRSTNAME, LASTNAME, EMAIL, PHONE)");
-         #conn.commit()
+        
     except ValueError:
         print(ValueError)
     return jsonify(request_data),200
